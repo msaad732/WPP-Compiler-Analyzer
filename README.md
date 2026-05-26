@@ -1,3 +1,9 @@
+<div align="center">
+  <img width="100%" alt="W++ Compiler Suite Home" src="https://github.com/user-attachments/assets/f3365516-605b-4777-bdf4-d223a6315b6b" />
+</div>
+
+<br>
+
 # 🚀 W++ Compiler Analyzer
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg?logo=python&logoColor=white)
@@ -15,16 +21,44 @@ This suite features a robust **Lexical Analyzer (Scanner)** and a **Recursive De
 ## ✨ Features
 
 ### 🔍 Task 1: Lexical Analyzer (Scanner)
+The Lexical Analyzer reads `.wpp` source code and breaks it down into a stream of logical tokens, calculating occurrences, percentages, and exact line number tracking.
+
+<div align="center">
+  <img width="100%" alt="Scanner Upload" src="https://github.com/user-attachments/assets/b4fa4fc6-f194-43c8-9d9c-ea2a1dbdef99" />
+  <br><br>
+  <img width="100%" alt="Token Summary" src="https://github.com/user-attachments/assets/4230bc51-5249-46dd-8bd0-ad21d20aef1c" />
+</div>
+
 - **Comprehensive Tokenization:** Identifies and categorizes keywords, separators, operators, identifiers, and literals.
-- **Detailed Statistical Breakdown:** Calculates occurrences, percentages, and exact line number tracking for every token.
-- **Ignored Entities:** Properly handles and ignores single-line (`//`), multi-line (`/* */`) comments, and whitespace.
+- **Interactive Data Tables:** View token analytics across multiple tabs with animated metric counters for Identifiers, Literals, and Category Breakdowns.
+
+<div align="center">
+  <img width="100%" alt="ID and Literals" src="https://github.com/user-attachments/assets/9c5ffc24-1b7a-4eef-8faa-af87d4fed226" />
+  <br><br>
+  <img width="100%" alt="Analytics" src="https://github.com/user-attachments/assets/fe5642e8-a3ad-4384-a486-d3d9ae3f6108" />
+</div>
+
+---
 
 ### 🏗️ Task 2: Syntax Analyzer (Parser)
-- **Recursive Descent Parsing:** Validates grammatical structure including nested loops (`for`, `while`), conditional blocks (`if/else`), and math expressions.
-- **Panic-Mode Error Recovery:** Does not crash on the first error! The parser smartly syncs to the next safe token (like `;` or `}`) to catch and report **multiple syntax errors** in a single pass.
-- **Scope Tracking:** Accurately counts `{` and `}` to report missing end-of-file closures.
+The Syntax Analyzer validates grammatical structure including nested loops (`for`, `while`), conditional blocks (`if/else`), and mathematical expressions.
+
+<div align="center">
+  <img width="100%" alt="Parser Upload" src="https://github.com/user-attachments/assets/785c97c7-426c-43b4-8166-ad9d83fe829f" />
+</div>
+
+- **Panic-Mode Error Recovery:** Does not crash on the first error! The parser smartly syncs to the next safe token (like `;` or `}`) to catch and report **multiple syntax errors** in a single compilation pass.
 - **Pinpoint Accuracy:** Reports the exact line number of missing terminators rather than bleeding into subsequent lines.
 
+<div align="center">
+  <img width="100%" alt="Parser Errors 1-3" src="https://github.com/user-attachments/assets/4389d2b1-fa38-4ae0-8e64-5770fd7c3390" />
+  <br><br>
+  <img width="100%" alt="Parser Errors 4-6" src="https://github.com/user-attachments/assets/3dda69e9-9012-4dcf-8947-2d7ab2a5da59" />
+  <br><br>
+  <img width="100%" alt="Parser Errors 7-10" src="https://github.com/user-attachments/assets/b56834cb-a72e-4ea2-9350-45dde54e2fa8" />
+</div>
+
+---
 ### 🖥️ User Interface
 - **Premium Web Dashboard:** Built with Vanilla HTML, JS, and Tailwind CSS.
 - **Drag & Drop Upload:** Instantly upload `.wpp` source files for processing.
@@ -46,8 +80,8 @@ Follow these steps to run the compiler suite locally on your machine.
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/your-username/wpp-compiler-suite.git](https://github.com/your-username/wpp-compiler-suite.git)
-cd wpp-compiler-suite
+git clone [https://github.com/msaad732/WPP-Compiler-Analyzer.git](https://github.com/msaad732/WPP-Compiler-Analyzer.git)
+cd WPP-Compiler-Analyzer
 
 ```
 
@@ -99,10 +133,11 @@ http://localhost:8000
 
 The repository includes several `.wpp` test files to demonstrate the compiler's capabilities:
 
-* `test_stress.wpp`: A completely valid program testing deeply nested scopes and complex math.
-* `test_errors.wpp`: A file with 8 distinct syntax errors to demonstrate the parser's panic-mode recovery.
-* `test_sneaky.wpp`: Tests edge cases like invalid operator sequences and reserved keyword misuse.
-
+* `test1.wpp:` A comprehensive test file containing variable declarations, math operations, conditionals, loops, and string manipulations to verify token generation.
+* `error.wpp:` A file specifically designed to test the parser's error recovery, containing deliberate mistakes like missing semicolons, mismatched parentheses, and invalid assignments.
+* `error2.wpp:` A "stress test" file that includes nested scopes, complex expressions, and I/O operations to ensure the parser can handle more complex logic without failing.
+* `error3.wpp:` A file containing "sneaky errors," such as missing parentheses around conditions, double math operators, and using a reserved keyword as a variable name.
+  
 To test, simply drag and drop one of these files into the web dashboard!
 
 ---
@@ -120,7 +155,3 @@ This project was developed for **Spring 2K26 - Task #2** by:
 ---
 
 *Note: This is an academic project built for educational purposes regarding compiler design, lexical analysis, and syntax parsing.*
-
-```
-
-```
