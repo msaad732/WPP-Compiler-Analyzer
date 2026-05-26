@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W++ Compiler Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-main: #FAFAFA;      /* Clean off-white */
+            --bg-panel: #FFFFFF;     /* Pure white panel */
+            --border-color: #E5E7EB; /* Soft gray border */
+            --border-gold: #FDE047;  /* Soft gold border for accents */
+            --accent-primary: #D4AF37; /* Rich Metallic Gold */
+            --accent-hover: #B48600; /* Deep Gold */
+            --text-main: #1F2937;    /* Deep Charcoal */
+            --text-muted: #6B7280;   /* Muted Slate */
+        }
+        
+        body { background-color: var(--bg-main); color: var(--text-main); font-family: 'Inter', -apple-system, sans-serif; }
+        
+        .glass-panel { 
+            background-color: var(--bg-panel); 
+            border: 1px solid var(--border-color); 
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
+        }
+        
+        .error-box { background-color: #FEF2F2; border: 1px solid #FCA5A5; padding: 16px; border-radius: 8px; margin-bottom: 12px; color: #991B1B; }
+        .success-box { background-color: #F0FDF4; border: 1px solid #86EFAC; padding: 16px; border-radius: 8px; margin-bottom: 12px; color: #166534; }
+        
+        /* Premium Light Theme Buttons */
+        .btn-primary { background-color: var(--accent-primary); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; transition: 0.2s; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(212, 175, 55, 0.2); }
+        .btn-primary:hover { background-color: var(--accent-hover); box-shadow: 0 6px 12px rgba(212, 175, 55, 0.3); transform: translateY(-1px); }
+        
+        .btn-danger { background-color: #EF4444; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; transition: 0.2s; border: none; cursor: pointer; }
+        .btn-danger:hover { background-color: #DC2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+        
+        .btn-success { background-color: #10B981; color: white; padding: 12px 32px; border-radius: 8px; font-weight: bold; transition: 0.2s; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
+        .btn-success:hover { background-color: #059669; box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3); transform: translateY(-1px); }
+
+        /* Compact Drag & Drop */
+        .drop-zone {
+            border: 2px dashed #CBD5E1;
+            border-radius: 12px;
+            background-color: #F8FAFC;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 32px 20px;
+        }
+        .drop-zone.dragover { border-color: var(--accent-primary); background-color: #FEFCE8; }
+
+        /* Tabs */
+        .tab-btn { padding: 10px 20px; color: var(--text-muted); border-bottom: 2px solid transparent; transition: 0.2s; cursor: pointer; font-weight: 600; }
+        .tab-btn.active { color: var(--accent-hover); border-bottom: 2px solid var(--accent-hover); }
+        .tab-content { display: none; padding-top: 20px; }
+        .tab-content.active { display: block; }
+
+        /* Light Theme Tables */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; }
+        th { background-color: #F9FAFB; color: #4B5563; font-weight: 700; padding: 12px; text-align: left; border-bottom: 2px solid var(--border-color); }
+        td { padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
+        tr:hover td { background-color: #F3F4F6; }
+
+        .hidden { display: none !important; }
+        
+        /* Elegant Gold Glow */
+        .text-glow { color: var(--accent-hover); text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-6xl mx-auto">
+
+    <div id="home-view">
+        <h1 class="text-4xl font-extrabold text-glow mb-2">W++ Compiler Analyzer</h1>
+        <br>
+        <div class="glass-panel p-6 mb-8 border-l-4 border-l-[#D4AF37]">
+            <h3 class="text-lg font-bold text-gray-900 mb-3">Project Team Details</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-gray-50 p-3 rounded text-sm border border-gray-100 shadow-sm"><strong>Eman Khaliq</strong> <span class="text-[#D4AF37] font-bold float-right">23-CS-01</span></div>
+                <div class="bg-gray-50 p-3 rounded text-sm border border-gray-100 shadow-sm"><strong>Muhammad Saad</strong> <span class="text-[#D4AF37] font-bold float-right">23-CS-31</span></div>
+                <div class="bg-gray-50 p-3 rounded text-sm border border-gray-100 shadow-sm"><strong>Syed Noor ul Hassan</strong> <span class="text-[#D4AF37] font-bold float-right">23-CS-85</span></div>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-4">
+            <button onclick="goToUpload('scanner')" class="btn-primary w-full h-16 text-lg flex justify-center items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> 
+                RUN SCANNER
+            </button>
+            <button onclick="goToUpload('parser')" class="btn-primary w-full h-16 text-lg flex justify-center items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                RUN PARSER
+            </button>
+        </div>
+    </div>
+
+    <div id="upload-view" class="hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-900" id="upload-title">Upload Source File</h1>
+            <button onclick="goToHome()" class="btn-primary">🏠 Main Menu</button>
+        </div>
+        
+        <div class="glass-panel p-8 text-center">
+            <div id="drop-zone" class="drop-zone mb-6" onclick="document.getElementById('file-input').click()">
+                <svg class="w-10 h-10 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                <div class="text-left">
+                    <h3 class="text-lg font-bold text-gray-900">Select or drag .wpp file here</h3>
+                    <p class="text-sm text-gray-500">Files are processed instantly on your local backend.</p>
+                </div>
+                <input type="file" id="file-input" class="hidden" accept=".wpp">
+            </div>
+
+            <div id="file-name-display" class="hidden text-gray-800 font-mono mb-6 bg-gray-100 border border-gray-200 shadow-sm inline-block px-4 py-2 rounded text-sm font-bold"></div>
+            
+            <div class="mt-2">
+                <button onclick="processFile()" class="btn-success">🚀 COMPILE FILE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="scanner-view" class="hidden">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">TOKEN ANALYZER REPORT</h1>
+                <p class="text-[#B48600] text-sm mt-1 font-mono font-bold" id="scanner-filename"></p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="goToHome()" class="btn-primary text-sm">🏠 Menu</button>
+                <button onclick="goToUpload('scanner')" class="btn-danger text-sm">🔄 Change File</button>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="glass-panel p-4 text-center">
+                <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Total Lines</p>
+                <h2 id="scan-lines" class="text-3xl font-extrabold text-gray-900">0</h2>
+            </div>
+            <div class="glass-panel p-4 text-center">
+                <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Code Lines</p>
+                <h2 id="scan-code" class="text-3xl font-extrabold text-gray-900">0</h2>
+            </div>
+            <div class="glass-panel p-4 text-center border-b-4 border-b-[#D4AF37]">
+                <p class="text-[#D4AF37] text-xs font-bold uppercase tracking-wider mb-1">Total Tokens</p>
+                <h2 id="scan-tokens" class="text-3xl font-extrabold text-gray-900">0</h2>
+            </div>
+        </div>
+        
+        <div class="glass-panel p-6">
+            <div class="flex border-b border-gray-200 mb-4 gap-4 overflow-x-auto">
+                <button class="tab-btn active" onclick="switchTab('tab1', this)">📋 Token Summary</button>
+                <button class="tab-btn" onclick="switchTab('tab2', this)">🆔 ID & Literals</button>
+                <button class="tab-btn" onclick="switchTab('tab3', this)">📊 Analytics</button>
+            </div>
+
+            <div id="tab1" class="tab-content active">
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Token Type</th>
+                                <th>Quantity</th>
+                                <th>% of Total</th>
+                                <th>Found on Lines</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-token-summary"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab2" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-3 border-l-4 border-[#D4AF37] pl-3">Identifiers</h3>
+                        <div class="overflow-y-auto max-h-80 border border-gray-100 rounded">
+                            <table>
+                                <thead><tr><th>Name</th><th>Freq</th><th>Lines</th></tr></thead>
+                                <tbody id="table-id-stats"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-3 border-l-4 border-gray-400 pl-3">Literals</h3>
+                        <div class="overflow-y-auto max-h-80 border border-gray-100 rounded">
+                            <table>
+                                <thead><tr><th>Value</th><th>Type</th><th>Freq</th><th>Lines</th></tr></thead>
+                                <tbody id="table-lit-stats"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab3" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Category Breakdown</h3>
+                        <table>
+                            <thead><tr><th>Category</th><th>Total Tokens</th><th>Percentage</th></tr></thead>
+                            <tbody id="table-cat-breakdown"></tbody>
+                        </table>
+                    </div>
+                    <div id="text-analytics" class="text-sm text-gray-700 space-y-3 bg-gray-50 p-5 rounded-lg border border-gray-200 shadow-sm">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="parser-view" class="hidden">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">SYNTAX ANALYZER REPORT</h1>
+                <p class="text-[#B48600] text-sm mt-1 font-mono font-bold" id="parser-filename"></p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="goToHome()" class="btn-primary text-sm">🏠 Menu</button>
+                <button onclick="goToUpload('parser')" class="btn-danger text-sm">🔄 Change File</button>
+            </div>
+        </div>
+        
+        <div class="glass-panel p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-900">Grammar Evaluation Output</h2>
+            <div id="parser-output"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = '';
+
+        // --- Drag and Drop Logic ---
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileNameDisplay = document.getElementById('file-name-display');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+
+        ['dragenter', 'dragover'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false));
+        ['dragleave', 'drop'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false));
+
+        dropZone.addEventListener('drop', (e) => {
+            fileInput.files = e.dataTransfer.files;
+            updateFileName();
+        }, false);
+
+        fileInput.addEventListener('change', updateFileName);
+
+        function updateFileName() {
+            if(fileInput.files.length > 0) {
+                fileNameDisplay.innerText = "📁 " + fileInput.files[0].name;
+                fileNameDisplay.classList.remove('hidden');
+            }
+        }
+
+        // --- Navigation ---
+        function hideAll() {
+            ['home-view', 'upload-view', 'parser-view', 'scanner-view'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+        }
+
+        function goToHome() { hideAll(); document.getElementById('home-view').classList.remove('hidden'); }
+        
+        function goToUpload(mode) {
+            currentMode = mode;
+            hideAll();
+            fileInput.value = '';
+            fileNameDisplay.classList.add('hidden');
+            document.getElementById('upload-title').innerText = `Upload for ${mode.toUpperCase()}`;
+            document.getElementById('upload-view').classList.remove('hidden');
+        }
+
+        // --- Tab Logic ---
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // --- File Processing ---
+        async function processFile() {
+            if (!fileInput.files[0]) return alert("Please select a .wpp file first!");
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "⏳ Compiling..."; btn.disabled = true;
+
+            const endpoint = currentMode === 'scanner' ? '/api/scanner' : '/api/parser';
+            
+            try {
+                const response = await fetch(endpoint, { method: "POST", body: formData });
+                const data = await response.json();
+                
+                if (currentMode === 'parser') renderParser(data);
+                if (currentMode === 'scanner') renderScanner(data);
+            } catch (err) { 
+                alert("Server error! Make sure main.py is running. Error: " + err.message); 
+            } finally {
+                btn.innerHTML = originalText; btn.disabled = false;
+            }
+        }
+
+        // --- Parser Render ---
+        function renderParser(data) {
+            hideAll();
+            document.getElementById('parser-view').classList.remove('hidden');
+            document.getElementById('parser-filename').innerText = "> " + data.filename;
+            
+            const out = document.getElementById('parser-output');
+            const res = data.results;
+
+            if (res.success) {
+                out.innerHTML = `
+                    <div class="success-box flex items-center gap-3">
+                        <span class="text-3xl">✅</span>
+                        <div>
+                            <strong class="text-green-700 text-lg">Compilation Successful!</strong>
+                            <p class="text-sm text-green-800">All scopes, declarations, and structures follow W++ language constraints perfectly.</p>
+                        </div>
+                    </div>`;
+            } else {
+                let html = `<h3 class="text-red-600 font-bold mb-4">⚠️ Found ${res.errors.length} Syntax Violation(s)</h3>`;
+                res.errors.forEach((err, idx) => {
+                    html += `
+                    <div class="error-box">
+                        <strong class="text-red-900">Error ${idx+1} <span class="text-red-400 text-xs ml-2">[Line ${err.line}]</span></strong><br>
+                        <span class="text-red-600 font-bold text-sm">${err.type}</span>
+                        <div class="bg-red-50 border border-red-200 rounded p-2 mt-2 mb-2 font-mono text-gray-800 text-sm shadow-inner">
+                            ${err.code}
+                        </div>
+                        <span class="text-red-700 text-sm">Detail: <span class="text-red-900 font-medium">${err.message}</span></span>
+                    </div>`;
+                });
+                out.innerHTML = html;
+            }
+        }
+
+        // --- Scanner Render ---
+        function renderScanner(data) {
+            hideAll();
+            document.getElementById('scanner-view').classList.remove('hidden');
+            document.getElementById('scanner-filename').innerText = "> " + data.filename;
+            
+            const res = data.results;
+            
+            document.getElementById('scan-lines').innerText = res.total_lines;
+            document.getElementById('scan-code').innerText = res.lines_with_code;
+            document.getElementById('scan-tokens').innerText = res.total_tokens;
+
+            // Tab 1
+            let sumHtml = '';
+            if (res.formatted_summary) {
+                res.formatted_summary.forEach(item => {
+                    let perc = ((item.qty / res.total_tokens) * 100).toFixed(2);
+                    sumHtml += `<tr>
+                        <td class="font-mono font-bold text-[#B48600]">${item.category}</td>
+                        <td class="font-mono text-gray-700">${item.token_type}</td>
+                        <td class="font-bold">${item.qty}</td>
+                        <td>${perc}%</td>
+                        <td class="text-gray-500 text-xs">${item.lines.join(", ")}</td>
+                    </tr>`;
+                });
+            }
+            sumHtml += `<tr class="text-gray-400 bg-gray-50"><td>COMMENT</td><td>COMMENT</td><td>0</td><td>0.00%</td><td class="text-xs">(ignored)</td></tr>`;
+            document.getElementById('table-token-summary').innerHTML = sumHtml;
+
+            // Tab 2
+            let idHtml = '';
+            for (const [name, lines] of Object.entries(res.identifier_details || {})) {
+                let uniqueLines = [...new Set(lines)].sort((a,b)=>a-b);
+                idHtml += `<tr><td class="font-mono font-bold text-[#B48600]">${name}</td><td>${lines.length}</td><td class="text-xs text-gray-500">${uniqueLines.join(", ")}</td></tr>`;
+            }
+            document.getElementById('table-id-stats').innerHTML = idHtml;
+
+            let litHtml = '';
+            for (const [val, type] of Object.entries(res.literal_types || {})) {
+                let lines = res.literal_lines[val] || [];
+                let uniqueLines = [...new Set(lines)].sort((a,b)=>a-b);
+                litHtml += `<tr><td class="font-mono font-bold text-gray-700">${val}</td><td class="text-xs">${type}</td><td>${lines.length}</td><td class="text-xs text-gray-500">${uniqueLines.join(", ")}</td></tr>`;
+            }
+            document.getElementById('table-lit-stats').innerHTML = litHtml;
+
+            // Tab 3
+            let catHtml = '';
+            for (const [cat, total] of Object.entries(res.stats || {})) {
+                let perc = ((total / res.total_tokens) * 100).toFixed(2);
+                catHtml += `<tr><td class="font-mono font-bold">${cat}</td><td>${total}</td><td>${perc}%</td></tr>`;
+            }
+            document.getElementById('table-cat-breakdown').innerHTML = catHtml;
+
+            if (res.formatted_summary && res.formatted_summary.length > 0) {
+                let sorted = [...res.formatted_summary].sort((a, b) => b.qty - a.qty);
+                let most = sorted[0];
+                let least = sorted[sorted.length - 1];
+                let avg = (res.total_tokens / Math.max(1, res.lines_with_code)).toFixed(2);
+                
+                document.getElementById('text-analytics').innerHTML = `
+                    <p><strong>Total Tokens Found:</strong> <span class="text-gray-900 font-bold">${res.total_tokens}</span></p>
+                    <p><strong>Unique Token Types:</strong> <span class="text-gray-900 font-bold">${res.formatted_summary.length}</span></p>
+                    <p><strong>Average Tokens per Code Line:</strong> <span class="text-gray-900 font-bold">${avg}</span></p>
+                    <hr class="border-gray-200 my-2">
+                    <p><strong>Most Frequent Token:</strong> <span class="text-[#B48600] font-mono font-bold">${most.token_type}</span> (${most.qty} times)</p>
+                    <p><strong>Least Frequent Token:</strong> <span class="text-gray-700 font-mono font-bold">${least.token_type}</span> (${least.qty} times)</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+// W++ Syntax Error Test Program
+// This file is intentionally broken to test the parser's error recovery.
+
+int main() {
+    // Error 1: Missing semicolon at the end of the line
+    int age = 25
+    
+    // Error 2: Missing identifier name after the data type
+    float = 3.14;
+
+    // Error 3: Mismatched parenthesis (missing the closing ')')
+    if (age > 18 {
+        print "Adult";
+    } else {
+        print "Minor";
+    }
+
+    // Error 4: Invalid expression (starts directly with a plus operator)
+    int sum = + 5;
+
+    // Error 5: Invalid assignment (missing the '=' sign)
+    age 30;
+
+    // Error 6: Missing semicolon in the 'for' loop condition
+    for (int i = 0 i < 10; i = i + 1) {
+        print i;
+    }
+
+    // Error 7: Missing semicolon after the return statement
+    return 0
+// Error 8: Missing the final closing brace '}' for the main function

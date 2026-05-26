@@ -1,0 +1,18 @@
+// W++ Sneaky Errors Test Program
+
+int main() {
+    int x = 10, y = 20;
+    
+    // Sneaky Error 1: Missing the parenthesis around the condition
+    if x > y {
+        print "x is bigger";
+    }
+    
+    // Sneaky Error 2: Double math operators back-to-back
+    int z = x + * y;
+
+    // Sneaky Error 3: Trying to use a reserved keyword as a variable name
+    int float = 5;
+
+    return 0;
+}

@@ -1,0 +1,37 @@
+/* W++ Stress Test Program
+   Testing nested scopes, complex expressions, and io */
+
+int main() {
+    int limit = 100;
+    int current = 0;
+    bool is_prime = true;
+
+    // Nested loops and conditions
+    while (current <= limit) {
+        if (current == 0 || current == 1) {
+            is_prime = false;
+        } else {
+            is_prime = true;
+            for (int i = 2; i < current; i = i + 1) {
+                if (current % i == 0) {
+                    is_prime = false;
+                }
+            }
+        }
+
+        if (is_prime == true) {
+            print current;
+        }
+        
+        current = current + 1;
+    }
+
+    // Complex math and reassignment
+    float a = 10.5, b = 2.2;
+    float result = (a * b) + (limit / 2) - 0.5;
+    
+    string msg = "Testing complete!";
+    print msg;
+
+    return 0;
+}
