@@ -53,9 +53,8 @@ The Syntax Analyzer validates grammatical structure including nested loops (`for
 <div align="center">
   <img width="100%" alt="Parser Errors 1-3" src="https://github.com/user-attachments/assets/4389d2b1-fa38-4ae0-8e64-5770fd7c3390" />
   <br><br>
-  <img width="100%" alt="Parser Errors 4-6" src="https://github.com/user-attachments/assets/3dda69e9-9012-4dcf-8947-2d7ab2a5da59" />
-  <br><br>
-  <img width="100%" alt="Parser Errors 7-10" src="https://github.com/user-attachments/assets/b56834cb-a72e-4ea2-9350-45dde54e2fa8" />
+  <img width="100%" alt="Source Code Viewer" src="https://github.com/user-attachments/assets/c294a69a-2cb5-43ee-bc28-a29a4b81e1ac" />
+" />
 </div>
 
 ---
