@@ -7,121 +7,147 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --bg-main: #FAFAFA;      /* Clean off-white */
-            --bg-panel: #FFFFFF;     /* Pure white panel */
-            --border-color: #E5E7EB; /* Soft gray border */
-            --border-gold: #FDE047;  /* Soft gold border for accents */
-            --accent-primary: #D4AF37; /* Rich Metallic Gold */
-            --accent-hover: #B48600; /* Deep Gold */
-            --text-main: #1F2937;    /* Deep Charcoal */
-            --text-muted: #6B7280;   /* Muted Slate */
+            --bg-main: #FAFAFA;
+            --bg-panel: #FFFFFF;
+            --border-color: #E5E7EB;
+            --accent-primary: #D4AF37;
+            --accent-hover: #B48600;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
         }
-        
+
         body { background-color: var(--bg-main); color: var(--text-main); font-family: 'Inter', -apple-system, sans-serif; }
-        
-        .glass-panel { 
-            background-color: var(--bg-panel); 
-            border: 1px solid var(--border-color); 
+
+        .glass-panel {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
         }
-        
-        .error-box { background-color: #FEF2F2; border: 1px solid #FCA5A5; padding: 16px; border-radius: 8px; margin-bottom: 12px; color: #991B1B; }
-        .success-box { background-color: #F0FDF4; border: 1px solid #86EFAC; padding: 16px; border-radius: 8px; margin-bottom: 12px; color: #166534; }
-        
-        /* Premium Light Theme Buttons */
-        .btn-primary { background-color: var(--accent-primary); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; transition: 0.2s; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(212, 175, 55, 0.2); }
-        .btn-primary:hover { background-color: var(--accent-hover); box-shadow: 0 6px 12px rgba(212, 175, 55, 0.3); transform: translateY(-1px); }
-        
-        .btn-danger { background-color: #EF4444; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; transition: 0.2s; border: none; cursor: pointer; }
-        .btn-danger:hover { background-color: #DC2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
-        
-        .btn-success { background-color: #10B981; color: white; padding: 12px 32px; border-radius: 8px; font-weight: bold; transition: 0.2s; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
-        .btn-success:hover { background-color: #059669; box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3); transform: translateY(-1px); }
 
-        /* Compact Drag & Drop */
+        .error-box   { background-color: #FEF2F2; border: 1px solid #FCA5A5; padding: 16px; border-radius: 8px; margin-bottom: 12px; color: #991B1B; }
+        .success-box { background-color: #F0FDF4; border: 1px solid #86EFAC; padding: 16px; border-radius: 8px; margin-bottom: 12px; color: #166534; }
+
+        .btn-primary { background-color: var(--accent-primary); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; transition: 0.2s; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(212,175,55,0.2); }
+        .btn-primary:hover { background-color: var(--accent-hover); box-shadow: 0 6px 12px rgba(212,175,55,0.3); transform: translateY(-1px); }
+        .btn-danger  { background-color: #EF4444; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; transition: 0.2s; border: none; cursor: pointer; }
+        .btn-danger:hover  { background-color: #DC2626; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+        .btn-success { background-color: #10B981; color: white; padding: 12px 32px; border-radius: 8px; font-weight: bold; transition: 0.2s; border: none; cursor: pointer; box-shadow: 0 4px 6px rgba(16,185,129,0.2); }
+        .btn-success:hover { background-color: #059669; box-shadow: 0 6px 12px rgba(16,185,129,0.3); transform: translateY(-1px); }
+        .btn-success:disabled { background-color: #6EE7B7; cursor: not-allowed; transform: none; box-shadow: none; }
+
         .drop-zone {
-            border: 2px dashed #CBD5E1;
-            border-radius: 12px;
-            background-color: #F8FAFC;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            padding: 32px 20px;
+            border: 2px dashed #CBD5E1; border-radius: 12px; background-color: #F8FAFC;
+            transition: all 0.2s ease; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 16px; padding: 32px 20px;
         }
         .drop-zone.dragover { border-color: var(--accent-primary); background-color: #FEFCE8; }
+        .drop-zone.file-ready { border-color: #10B981; background-color: #F0FDF4; }
 
-        /* Tabs */
-        .tab-btn { padding: 10px 20px; color: var(--text-muted); border-bottom: 2px solid transparent; transition: 0.2s; cursor: pointer; font-weight: 600; }
+        .tab-btn { padding: 10px 20px; color: var(--text-muted); border-bottom: 2px solid transparent; transition: 0.2s; cursor: pointer; font-weight: 600; white-space: nowrap; }
         .tab-btn.active { color: var(--accent-hover); border-bottom: 2px solid var(--accent-hover); }
         .tab-content { display: none; padding-top: 20px; }
         .tab-content.active { display: block; }
 
-        /* Light Theme Tables */
         table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; }
         th { background-color: #F9FAFB; color: #4B5563; font-weight: 700; padding: 12px; text-align: left; border-bottom: 2px solid var(--border-color); }
         td { padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
         tr:hover td { background-color: #F3F4F6; }
+        .zero-row td { color: #9CA3AF; font-style: italic; }
 
         .hidden { display: none !important; }
-        
-        /* Elegant Gold Glow */
-        .text-glow { color: var(--accent-hover); text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        .text-glow { color: var(--accent-hover); text-shadow: 0 0 20px rgba(212,175,55,0.4); }
+
+        /* Loading overlay */
+        #loading-overlay {
+            position: fixed; inset: 0; background: rgba(255,255,255,0.75);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 50; backdrop-filter: blur(3px);
+        }
+        .spinner {
+            width: 48px; height: 48px;
+            border: 4px solid #E5E7EB; border-top-color: var(--accent-primary);
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Code viewer */
+        .code-viewer {
+            background-color: #1E1E2E; border-radius: 10px; overflow: auto; max-height: 520px;
+            font-family: 'Consolas', 'Fira Mono', monospace; font-size: 0.82rem; line-height: 1.6;
+        }
+        .code-line { display: flex; align-items: stretch; border-left: 3px solid transparent; }
+        .code-line:hover { background-color: rgba(255,255,255,0.04); }
+        .code-line.error-line   { background-color: rgba(239,68,68,0.18); border-left: 3px solid #EF4444; }
+        .code-line.success-line { border-left: 3px solid transparent; }
+        .code-line .line-num {
+            min-width: 44px; text-align: right; padding: 0 12px 0 8px;
+            color: #555577; user-select: none; flex-shrink: 0;
+        }
+        .code-line.error-line .line-num { color: #F87171; font-weight: bold; }
+        .code-line .line-code { padding: 0 16px 0 4px; white-space: pre; color: #CDD6F4; flex: 1; }
+        .code-line.error-line .line-code { color: #FCA5A5; }
+        .code-line .error-tag {
+            padding: 0 10px; color: #F87171; font-size: 0.75rem;
+            white-space: nowrap; display: flex; align-items: center; gap: 4px;
+        }
     </style>
 </head>
 <body class="p-4 md:p-8 max-w-6xl mx-auto">
 
+    <!-- LOADING OVERLAY -->
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner mb-4"></div>
+        <p class="text-gray-600 font-semibold text-sm">Analyzing file…</p>
+    </div>
+
+    <!-- HOME -->
     <div id="home-view">
         <h1 class="text-4xl font-extrabold text-glow mb-2">W++ Compiler Analyzer</h1>
         <br>
         <div class="glass-panel p-6 mb-8 border-l-4 border-l-[#D4AF37]">
             <h3 class="text-lg font-bold text-gray-900 mb-3">Project Team Details</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-gray-50 p-3 rounded text-sm border border-gray-100 shadow-sm"><strong>Eman Khaliq</strong> <span class="text-[#D4AF37] font-bold float-right">23-CS-01</span></div>
-                <div class="bg-gray-50 p-3 rounded text-sm border border-gray-100 shadow-sm"><strong>Muhammad Saad</strong> <span class="text-[#D4AF37] font-bold float-right">23-CS-31</span></div>
-                <div class="bg-gray-50 p-3 rounded text-sm border border-gray-100 shadow-sm"><strong>Syed Noor ul Hassan</strong> <span class="text-[#D4AF37] font-bold float-right">23-CS-85</span></div>
+                <div class="bg-gray-50 p-3 rounded text-sm border border-gray-100 shadow-sm"><strong>Eman Khaliq</strong>      <span class="text-[#D4AF37] font-bold float-right">23-CS-01</span></div>
+                <div class="bg-gray-50 p-3 rounded text-sm border border-gray-100 shadow-sm"><strong>Muhammad Saad</strong>     <span class="text-[#D4AF37] font-bold float-right">23-CS-31</span></div>
+                <div class="bg-gray-50 p-3 rounded text-sm border border-gray-100 shadow-sm"><strong>Syed Noor ul Hassan</strong><span class="text-[#D4AF37] font-bold float-right">23-CS-85</span></div>
             </div>
         </div>
-
         <div class="flex flex-col md:flex-row gap-4">
             <button onclick="goToUpload('scanner')" class="btn-primary w-full h-16 text-lg flex justify-center items-center gap-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> 
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 RUN SCANNER
             </button>
             <button onclick="goToUpload('parser')" class="btn-primary w-full h-16 text-lg flex justify-center items-center gap-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                 RUN PARSER
             </button>
         </div>
     </div>
 
+    <!-- UPLOAD -->
     <div id="upload-view" class="hidden">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-900" id="upload-title">Upload Source File</h1>
             <button onclick="goToHome()" class="btn-primary">🏠 Main Menu</button>
         </div>
-        
         <div class="glass-panel p-8 text-center">
             <div id="drop-zone" class="drop-zone mb-6" onclick="document.getElementById('file-input').click()">
-                <svg class="w-10 h-10 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                <svg class="w-10 h-10 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                 <div class="text-left">
-                    <h3 class="text-lg font-bold text-gray-900">Select or drag .wpp file here</h3>
+                    <h3 class="text-lg font-bold text-gray-900" id="drop-label">Select or drag .wpp file here</h3>
                     <p class="text-sm text-gray-500">Files are processed instantly on your local backend.</p>
                 </div>
                 <input type="file" id="file-input" class="hidden" accept=".wpp">
             </div>
-
             <div id="file-name-display" class="hidden text-gray-800 font-mono mb-6 bg-gray-100 border border-gray-200 shadow-sm inline-block px-4 py-2 rounded text-sm font-bold"></div>
-            
             <div class="mt-2">
-                <button onclick="processFile()" class="btn-success">🚀 COMPILE FILE</button>
+                <button id="compile-btn" onclick="processFile()" class="btn-success">🚀 COMPILE FILE</button>
             </div>
         </div>
     </div>
 
+    <!-- SCANNER RESULTS -->
     <div id="scanner-view" class="hidden">
         <div class="flex justify-between items-center mb-6">
             <div>
@@ -133,7 +159,6 @@
                 <button onclick="goToUpload('scanner')" class="btn-danger text-sm">🔄 Change File</button>
             </div>
         </div>
-        
         <div class="grid grid-cols-3 gap-4 mb-6">
             <div class="glass-panel p-4 text-center">
                 <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Total Lines</p>
@@ -148,70 +173,49 @@
                 <h2 id="scan-tokens" class="text-3xl font-extrabold text-gray-900">0</h2>
             </div>
         </div>
-        
         <div class="glass-panel p-6">
             <div class="flex border-b border-gray-200 mb-4 gap-4 overflow-x-auto">
                 <button class="tab-btn active" onclick="switchTab('tab1', this)">📋 Token Summary</button>
                 <button class="tab-btn" onclick="switchTab('tab2', this)">🆔 ID & Literals</button>
                 <button class="tab-btn" onclick="switchTab('tab3', this)">📊 Analytics</button>
             </div>
-
             <div id="tab1" class="tab-content active">
                 <div class="overflow-x-auto">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Token Type</th>
-                                <th>Quantity</th>
-                                <th>% of Total</th>
-                                <th>Found on Lines</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Category</th><th>Token Type</th><th>Quantity</th><th>% of Total</th><th>Found on Lines</th></tr></thead>
                         <tbody id="table-token-summary"></tbody>
                     </table>
                 </div>
             </div>
-
             <div id="tab2" class="tab-content">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="text-lg font-bold text-gray-900 mb-3 border-l-4 border-[#D4AF37] pl-3">Identifiers</h3>
                         <div class="overflow-y-auto max-h-80 border border-gray-100 rounded">
-                            <table>
-                                <thead><tr><th>Name</th><th>Freq</th><th>Lines</th></tr></thead>
-                                <tbody id="table-id-stats"></tbody>
-                            </table>
+                            <table><thead><tr><th>Name</th><th>Freq</th><th>Lines</th></tr></thead><tbody id="table-id-stats"></tbody></table>
                         </div>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold text-gray-900 mb-3 border-l-4 border-gray-400 pl-3">Literals</h3>
                         <div class="overflow-y-auto max-h-80 border border-gray-100 rounded">
-                            <table>
-                                <thead><tr><th>Value</th><th>Type</th><th>Freq</th><th>Lines</th></tr></thead>
-                                <tbody id="table-lit-stats"></tbody>
-                            </table>
+                            <table><thead><tr><th>Value</th><th>Type</th><th>Freq</th><th>Lines</th></tr></thead><tbody id="table-lit-stats"></tbody></table>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div id="tab3" class="tab-content">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                         <h3 class="text-lg font-bold text-gray-900 mb-4">Category Breakdown</h3>
-                        <table>
-                            <thead><tr><th>Category</th><th>Total Tokens</th><th>Percentage</th></tr></thead>
-                            <tbody id="table-cat-breakdown"></tbody>
-                        </table>
+                        <table><thead><tr><th>Category</th><th>Total Tokens</th><th>Percentage</th></tr></thead><tbody id="table-cat-breakdown"></tbody></table>
                     </div>
-                    <div id="text-analytics" class="text-sm text-gray-700 space-y-3 bg-gray-50 p-5 rounded-lg border border-gray-200 shadow-sm">
-                        </div>
+                    <div id="text-analytics" class="text-sm text-gray-700 space-y-3 bg-gray-50 p-5 rounded-lg border border-gray-200 shadow-sm"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- PARSER RESULTS -->
     <div id="parser-view" class="hidden">
         <div class="flex justify-between items-center mb-6">
             <div>
@@ -223,105 +227,158 @@
                 <button onclick="goToUpload('parser')" class="btn-danger text-sm">🔄 Change File</button>
             </div>
         </div>
-        
-        <div class="glass-panel p-6">
+        <div class="glass-panel p-6 mb-6">
             <h2 class="text-xl font-bold mb-4 text-gray-900">Grammar Evaluation Output</h2>
             <div id="parser-output"></div>
+        </div>
+        <!-- Full annotated source (shown for both success and error) -->
+        <div id="parser-source-section" class="glass-panel p-6 hidden">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-bold text-gray-900">📄 Source File — Annotated View</h2>
+                <span id="parser-error-badge" class="text-xs font-bold px-3 py-1 rounded-full"></span>
+            </div>
+            <p id="parser-source-hint" class="text-sm text-gray-500 mb-4"></p>
+            <div id="parser-code-viewer" class="code-viewer"></div>
         </div>
     </div>
 
     <script>
         let currentMode = '';
 
-        // --- Drag and Drop Logic ---
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
-        const fileNameDisplay = document.getElementById('file-name-display');
+        const dropZone       = document.getElementById('drop-zone');
+        const fileInput      = document.getElementById('file-input');
+        const fileNameDisplay= document.getElementById('file-name-display');
+        const dropLabel      = document.getElementById('drop-label');
+        const loadingOverlay = document.getElementById('loading-overlay');
 
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-            document.body.addEventListener(eventName, preventDefaults, false);
+        // ── Drag & drop ────────────────────────────────────────────
+        ['dragenter','dragover','dragleave','drop'].forEach(ev => {
+            dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); });
+            document.body.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); });
         });
-
-        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
-
-        ['dragenter', 'dragover'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false));
-        ['dragleave', 'drop'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false));
-
-        dropZone.addEventListener('drop', (e) => {
-            fileInput.files = e.dataTransfer.files;
-            updateFileName();
-        }, false);
-
+        ['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, () => dropZone.classList.add('dragover')));
+        ['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, () => dropZone.classList.remove('dragover')));
+        dropZone.addEventListener('drop', e => { fileInput.files = e.dataTransfer.files; updateFileName(); });
         fileInput.addEventListener('change', updateFileName);
 
         function updateFileName() {
-            if(fileInput.files.length > 0) {
-                fileNameDisplay.innerText = "📁 " + fileInput.files[0].name;
-                fileNameDisplay.classList.remove('hidden');
+            if (!fileInput.files.length) return;
+            const name = fileInput.files[0].name;
+
+            // FIX: validate .wpp extension on drop too
+            if (!name.endsWith('.wpp')) {
+                alert(`"${name}" is not a .wpp file. Please upload a valid W++ source file.`);
+                fileInput.value = '';
+                dropZone.classList.remove('file-ready');
+                fileNameDisplay.classList.add('hidden');
+                dropLabel.innerText = 'Select or drag .wpp file here';
+                return;
             }
+            fileNameDisplay.innerText = '📁 ' + name;
+            fileNameDisplay.classList.remove('hidden');
+            dropZone.classList.add('file-ready');
+            dropLabel.innerText = name + ' — ready';
         }
 
-        // --- Navigation ---
+        // ── Navigation ─────────────────────────────────────────────
         function hideAll() {
-            ['home-view', 'upload-view', 'parser-view', 'scanner-view'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
+            ['home-view','upload-view','parser-view','scanner-view'].forEach(id =>
+                document.getElementById(id).classList.add('hidden'));
         }
-
         function goToHome() { hideAll(); document.getElementById('home-view').classList.remove('hidden'); }
-        
         function goToUpload(mode) {
             currentMode = mode;
             hideAll();
             fileInput.value = '';
             fileNameDisplay.classList.add('hidden');
+            dropZone.classList.remove('file-ready');
+            dropLabel.innerText = 'Select or drag .wpp file here';
             document.getElementById('upload-title').innerText = `Upload for ${mode.toUpperCase()}`;
             document.getElementById('upload-view').classList.remove('hidden');
         }
 
-        // --- Tab Logic ---
-        function switchTab(tabId, btnElement) {
+        // ── Tabs ───────────────────────────────────────────────────
+        function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            btnElement.classList.add('active');
+            btn.classList.add('active');
         }
 
-        // --- File Processing ---
+        // ── Process file ───────────────────────────────────────────
         async function processFile() {
-            if (!fileInput.files[0]) return alert("Please select a .wpp file first!");
+            if (!fileInput.files[0]) return alert('Please select a .wpp file first!');
+            if (!fileInput.files[0].name.endsWith('.wpp'))
+                return alert('Please upload a .wpp file.');
 
             const formData = new FormData();
-            formData.append("file", fileInput.files[0]);
+            formData.append('file', fileInput.files[0]);
 
-            const btn = event.target;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "⏳ Compiling..."; btn.disabled = true;
+            // Show loading overlay
+            loadingOverlay.classList.remove('hidden');
+            const btn = document.getElementById('compile-btn');
+            btn.disabled = true;
 
             const endpoint = currentMode === 'scanner' ? '/api/scanner' : '/api/parser';
-            
             try {
-                const response = await fetch(endpoint, { method: "POST", body: formData });
+                const response = await fetch(endpoint, { method: 'POST', body: formData });
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(`Server returned ${response.status}. Check terminal.\n\n${text.slice(0, 300)}`);
+                }
                 const data = await response.json();
-                
                 if (currentMode === 'parser') renderParser(data);
-                if (currentMode === 'scanner') renderScanner(data);
-            } catch (err) { 
-                alert("Server error! Make sure main.py is running. Error: " + err.message); 
+                else renderScanner(data);
+            } catch (err) {
+                alert('Error: ' + err.message);
             } finally {
-                btn.innerHTML = originalText; btn.disabled = false;
+                loadingOverlay.classList.add('hidden');
+                btn.disabled = false;
             }
         }
 
-        // --- Parser Render ---
+        // ── Helpers ────────────────────────────────────────────────
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function buildCodeViewer(annotatedSource, errorMessages) {
+            let html = '';
+            annotatedSource.forEach(row => {
+                const isErr = row.has_error;
+                const tag = isErr
+                    ? `<span class="error-tag">⚠ ${errorMessages[row.line_num].join(', ')}</span>`
+                    : '';
+                html += `<div class="code-line${isErr ? ' error-line' : ''}">
+                    <span class="line-num">${row.line_num}</span>
+                    <span class="line-code">${escapeHtml(row.code)}</span>${tag}
+                </div>`;
+            });
+            return html;
+        }
+
+        // ── Parser render ──────────────────────────────────────────
         function renderParser(data) {
             hideAll();
             document.getElementById('parser-view').classList.remove('hidden');
-            document.getElementById('parser-filename').innerText = "> " + data.filename;
-            
+            document.getElementById('parser-filename').innerText = '> ' + data.filename;
+
             const out = document.getElementById('parser-output');
             const res = data.results;
+            const section = document.getElementById('parser-source-section');
+            const viewer  = document.getElementById('parser-code-viewer');
+            const badge   = document.getElementById('parser-error-badge');
+            const hint    = document.getElementById('parser-source-hint');
+
+            // Build error message map
+            const errorMessages = {};
+            (res.errors || []).forEach(e => {
+                if (!errorMessages[e.line]) errorMessages[e.line] = [];
+                errorMessages[e.line].push(e.type);
+            });
 
             if (res.success) {
                 out.innerHTML = `
@@ -332,91 +389,142 @@
                             <p class="text-sm text-green-800">All scopes, declarations, and structures follow W++ language constraints perfectly.</p>
                         </div>
                     </div>`;
+
+                // FIX: Show source viewer on success too (all lines clean)
+                badge.innerText = 'No errors';
+                badge.className = 'text-xs font-bold px-3 py-1 rounded-full bg-green-100 text-green-700';
+                hint.innerText  = 'All lines parsed successfully.';
             } else {
-                let html = `<h3 class="text-red-600 font-bold mb-4">⚠️ Found ${res.errors.length} Syntax Violation(s)</h3>`;
+                // FIX: Slimmer error cards — no redundant code snippet, just line + type + message
+                const errorCount = res.errors.length;
+                let html = `<h3 class="text-red-600 font-bold mb-4">⚠️ Found ${errorCount} Syntax Violation(s)</h3>`;
                 res.errors.forEach((err, idx) => {
                     html += `
                     <div class="error-box">
-                        <strong class="text-red-900">Error ${idx+1} <span class="text-red-400 text-xs ml-2">[Line ${err.line}]</span></strong><br>
-                        <span class="text-red-600 font-bold text-sm">${err.type}</span>
-                        <div class="bg-red-50 border border-red-200 rounded p-2 mt-2 mb-2 font-mono text-gray-800 text-sm shadow-inner">
-                            ${err.code}
+                        <div class="flex items-center justify-between mb-1">
+                            <strong class="text-red-900">Error ${idx + 1}</strong>
+                            <span class="text-xs font-mono bg-red-100 text-red-700 px-2 py-0.5 rounded">Line ${err.line}</span>
                         </div>
-                        <span class="text-red-700 text-sm">Detail: <span class="text-red-900 font-medium">${err.message}</span></span>
+                        <span class="text-red-600 font-bold text-sm block mb-1">${escapeHtml(err.type)}</span>
+                        <span class="text-red-800 text-sm">${escapeHtml(err.message)}</span>
                     </div>`;
                 });
                 out.innerHTML = html;
+
+                const errorLineCount = new Set(res.errors.map(e => e.line)).size;
+                badge.innerText = `${errorLineCount} line(s) flagged`;
+                badge.className = 'text-xs font-bold px-3 py-1 rounded-full bg-red-100 text-red-700';
+                hint.innerText  = 'Lines highlighted in red contain a detected syntax error.';
+            }
+
+            // Render annotated source for both success and error
+            if (res.annotated_source && res.annotated_source.length > 0) {
+                viewer.innerHTML = buildCodeViewer(res.annotated_source, errorMessages);
+                section.classList.remove('hidden');
+
+                // Auto-scroll to first error
+                if (!res.success) {
+                    setTimeout(() => {
+                        const firstErr = viewer.querySelector('.error-line');
+                        if (firstErr) firstErr.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                    }, 100);
+                }
             }
         }
 
-        // --- Scanner Render ---
+        // ── Scanner render ─────────────────────────────────────────
         function renderScanner(data) {
             hideAll();
             document.getElementById('scanner-view').classList.remove('hidden');
-            document.getElementById('scanner-filename').innerText = "> " + data.filename;
-            
+            document.getElementById('scanner-filename').innerText = '> ' + data.filename;
+
             const res = data.results;
-            
-            document.getElementById('scan-lines').innerText = res.total_lines;
-            document.getElementById('scan-code').innerText = res.lines_with_code;
+            document.getElementById('scan-lines').innerText  = res.total_lines;
+            document.getElementById('scan-code').innerText   = res.lines_with_code;
             document.getElementById('scan-tokens').innerText = res.total_tokens;
 
-            // Tab 1
+            // Tab 1 — token summary
             let sumHtml = '';
-            if (res.formatted_summary) {
-                res.formatted_summary.forEach(item => {
-                    let perc = ((item.qty / res.total_tokens) * 100).toFixed(2);
-                    sumHtml += `<tr>
-                        <td class="font-mono font-bold text-[#B48600]">${item.category}</td>
-                        <td class="font-mono text-gray-700">${item.token_type}</td>
-                        <td class="font-bold">${item.qty}</td>
-                        <td>${perc}%</td>
-                        <td class="text-gray-500 text-xs">${item.lines.join(", ")}</td>
-                    </tr>`;
-                });
-            }
-            sumHtml += `<tr class="text-gray-400 bg-gray-50"><td>COMMENT</td><td>COMMENT</td><td>0</td><td>0.00%</td><td class="text-xs">(ignored)</td></tr>`;
+            (res.formatted_summary || []).forEach(item => {
+                const perc = ((item.qty / res.total_tokens) * 100).toFixed(2);
+                sumHtml += `<tr>
+                    <td class="font-mono font-bold text-[#B48600]">${item.category}</td>
+                    <td class="font-mono text-gray-700">${item.token_type}</td>
+                    <td class="font-bold">${item.qty}</td>
+                    <td>${perc}%</td>
+                    <td class="text-gray-500 text-xs">${item.lines.join(', ')}</td>
+                </tr>`;
+            });
+            sumHtml += `<tr class="zero-row"><td>COMMENT</td><td>COMMENT</td><td>0</td><td>0.00%</td><td class="text-xs">(stripped before analysis)</td></tr>`;
             document.getElementById('table-token-summary').innerHTML = sumHtml;
 
-            // Tab 2
+            // Tab 2 — identifiers
             let idHtml = '';
             for (const [name, lines] of Object.entries(res.identifier_details || {})) {
-                let uniqueLines = [...new Set(lines)].sort((a,b)=>a-b);
-                idHtml += `<tr><td class="font-mono font-bold text-[#B48600]">${name}</td><td>${lines.length}</td><td class="text-xs text-gray-500">${uniqueLines.join(", ")}</td></tr>`;
+                const u = [...new Set(lines)].sort((a,b)=>a-b);
+                idHtml += `<tr>
+                    <td class="font-mono font-bold text-[#B48600]">${escapeHtml(name)}</td>
+                    <td>${lines.length}</td>
+                    <td class="text-xs text-gray-500">${u.join(', ')}</td>
+                </tr>`;
             }
-            document.getElementById('table-id-stats').innerHTML = idHtml;
+            document.getElementById('table-id-stats').innerHTML = idHtml || '<tr><td colspan="3" class="text-gray-400 text-center">No identifiers found.</td></tr>';
 
+            // Tab 2 — literals
             let litHtml = '';
             for (const [val, type] of Object.entries(res.literal_types || {})) {
-                let lines = res.literal_lines[val] || [];
-                let uniqueLines = [...new Set(lines)].sort((a,b)=>a-b);
-                litHtml += `<tr><td class="font-mono font-bold text-gray-700">${val}</td><td class="text-xs">${type}</td><td>${lines.length}</td><td class="text-xs text-gray-500">${uniqueLines.join(", ")}</td></tr>`;
+                const lines = res.literal_lines[val] || [];
+                const u = [...new Set(lines)].sort((a,b)=>a-b);
+                litHtml += `<tr>
+                    <td class="font-mono font-bold text-gray-700">${escapeHtml(val)}</td>
+                    <td class="text-xs">${type}</td>
+                    <td>${lines.length}</td>
+                    <td class="text-xs text-gray-500">${u.join(', ')}</td>
+                </tr>`;
             }
-            document.getElementById('table-lit-stats').innerHTML = litHtml;
+            document.getElementById('table-lit-stats').innerHTML = litHtml || '<tr><td colspan="4" class="text-gray-400 text-center">No literals found.</td></tr>';
 
-            // Tab 3
+            // Tab 3 — category breakdown
+            // FIX: skip zero-count categories from the table so it doesn't look broken
             let catHtml = '';
             for (const [cat, total] of Object.entries(res.stats || {})) {
-                let perc = ((total / res.total_tokens) * 100).toFixed(2);
-                catHtml += `<tr><td class="font-mono font-bold">${cat}</td><td>${total}</td><td>${perc}%</td></tr>`;
+                if (total === 0) continue;
+                const perc = ((total / res.total_tokens) * 100).toFixed(2);
+                catHtml += `<tr>
+                    <td class="font-mono font-bold">${cat}</td>
+                    <td>${total}</td>
+                    <td>${perc}%</td>
+                </tr>`;
             }
             document.getElementById('table-cat-breakdown').innerHTML = catHtml;
 
+            // Tab 3 — analytics panel
+            const a = res.analytics || {};
+            const avg = a.avg_tokens_per_line ?? (res.total_tokens / Math.max(1, res.lines_with_code)).toFixed(2);
+
+            let mostLabel = '—', leastLabel = '—', mostQty = '—', leastQty = '—';
             if (res.formatted_summary && res.formatted_summary.length > 0) {
-                let sorted = [...res.formatted_summary].sort((a, b) => b.qty - a.qty);
-                let most = sorted[0];
-                let least = sorted[sorted.length - 1];
-                let avg = (res.total_tokens / Math.max(1, res.lines_with_code)).toFixed(2);
-                
-                document.getElementById('text-analytics').innerHTML = `
-                    <p><strong>Total Tokens Found:</strong> <span class="text-gray-900 font-bold">${res.total_tokens}</span></p>
-                    <p><strong>Unique Token Types:</strong> <span class="text-gray-900 font-bold">${res.formatted_summary.length}</span></p>
-                    <p><strong>Average Tokens per Code Line:</strong> <span class="text-gray-900 font-bold">${avg}</span></p>
-                    <hr class="border-gray-200 my-2">
-                    <p><strong>Most Frequent Token:</strong> <span class="text-[#B48600] font-mono font-bold">${most.token_type}</span> (${most.qty} times)</p>
-                    <p><strong>Least Frequent Token:</strong> <span class="text-gray-700 font-mono font-bold">${least.token_type}</span> (${least.qty} times)</p>
-                `;
+                // FIX: filter zero-count entries before computing most/least
+                const nonZero = res.formatted_summary.filter(x => x.qty > 0);
+                if (nonZero.length > 0) {
+                    const sorted = [...nonZero].sort((x,y) => y.qty - x.qty);
+                    mostLabel  = sorted[0].token_type;             mostQty  = sorted[0].qty;
+                    leastLabel = sorted[sorted.length-1].token_type; leastQty = sorted[sorted.length-1].qty;
+                }
             }
+
+            document.getElementById('text-analytics').innerHTML = `
+                <p><strong>Total Tokens:</strong> <span class="font-bold text-gray-900">${res.total_tokens}</span></p>
+                <p><strong>Unique Token Types:</strong> <span class="font-bold text-gray-900">${a.unique_token_types ?? '—'}</span></p>
+                <p><strong>Empty Lines:</strong> <span class="font-bold text-gray-900">${a.empty_lines ?? '—'}</span></p>
+                <p><strong>Avg Tokens / Code Line:</strong> <span class="font-bold text-gray-900">${avg}</span></p>
+                <hr class="border-gray-200 my-2">
+                <p><strong>Most Frequent:</strong> <span class="text-[#B48600] font-mono font-bold">${mostLabel}</span> (${mostQty} times)</p>
+                <p><strong>Least Frequent:</strong> <span class="font-mono font-bold text-gray-700">${leastLabel}</span> (${leastQty} times)</p>
+                ${a.densest_line ? `<hr class="border-gray-200 my-2">
+                <p><strong>Densest Line:</strong> Line <span class="font-bold">${a.densest_line}</span> — ${a.densest_line_token_count} tokens</p>
+                <p><strong>Sparsest Line:</strong> Line <span class="font-bold">${a.sparsest_line}</span> — ${a.sparsest_line_token_count} tokens</p>` : ''}
+            `;
         }
     </script>
 </body>
