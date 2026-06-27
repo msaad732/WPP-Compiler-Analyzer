@@ -18,14 +18,14 @@ def generate_token_stream(content):
 
     for line_num, raw_line in enumerate(lines, 1):
         line = raw_line
-        
-        # Handle Comments
+
         if multi_line_comment:
             if "*/" in line:
                 line = line.split("*/", 1)[1]
                 multi_line_comment = False
-            else: continue
-                
+            else:
+                continue
+
         if "/*" in line:
             if "*/" in line:
                 parts = line.split("/*", 1)
@@ -34,23 +34,23 @@ def generate_token_stream(content):
             else:
                 line = line.split("/*", 1)[0]
                 multi_line_comment = True
-                
-        if "//" in line: line = line.split("//", 1)[0]
 
-        # Token Extraction
+        if "//" in line:
+            line = line.split("//", 1)[0]
+
         words = []
         temp = ""
         in_string = False
         in_char = False
         i = 0
-        
+
         while i < len(line):
             char = line[i]
             if (in_string or in_char) and char == '\\':
                 temp += char; i += 1
                 if i < len(line): temp += line[i]
                 i += 1; continue
-                
+
             if char == '"' and not in_char:
                 in_string = not in_string
                 temp += char
@@ -73,19 +73,19 @@ def generate_token_stream(content):
                 if temp: words.append(temp); temp = ""
             else: temp += char
             i += 1
-            
+
         if temp: words.append(temp)
 
-        # Categorize
         for w in words:
             if w in KEYWORDS: cat = "KEYWORD"
             elif w in SEPARATORS: cat = "SEPARATOR"
             elif w in OPERATORS: cat = "OPERATOR"
-            elif w.isdigit() or ('.' in w and w.replace('.','',1).isdigit()) or w.startswith('"') or w.startswith("'"): cat = "LITERAL"
+            elif w.isdigit() or ('.' in w and w.replace('.', '', 1).isdigit()) or w.startswith('"') or w.startswith("'"): cat = "LITERAL"
             else: cat = "IDENTIFIER"
             tokens.append(Token(w, cat, line_num, raw_line.strip()))
-            
+
     return tokens
+
 
 class Parser:
     def __init__(self, tokens):
@@ -116,11 +116,21 @@ class Parser:
     def report_error(self, err_type, message, use_prev=False):
         tok = self.tokens[self.pos - 1] if use_prev and self.pos > 0 else self.current()
         if tok:
-            self.errors.append({"line": tok.line_num, "type": err_type, "message": message, "code": tok.raw_line})
+            self.errors.append({
+                "line": tok.line_num,
+                "type": err_type,
+                "message": message,
+                "code": tok.raw_line
+            })
         else:
             prev = self.tokens[-1] if self.tokens else None
             line = prev.line_num if prev else 0
-            self.errors.append({"line": line, "type": err_type, "message": message, "code": "End of File"})
+            self.errors.append({
+                "line": line,
+                "type": err_type,
+                "message": message,
+                "code": "End of File"
+            })
 
     def sync(self):
         while self.current():
@@ -136,7 +146,7 @@ class Parser:
         while self.current():
             if not self.parse_statement():
                 self.advance()
-        
+
         if self.scope_depth > 0:
             self.report_error("Missing Brace", "Missing closing brace '}' at end of file.", use_prev=True)
 
@@ -153,8 +163,9 @@ class Parser:
             return True
         elif tok.value == "else":
             self.advance()
-            if self.current() and self.current().value == "if": pass 
-            elif not self.match("{"): self.report_error("Syntax Error", "Expected '{' after else.")
+            if self.current() and self.current().value == "if": pass
+            elif not self.match("{"):
+                self.report_error("Syntax Error", "Expected '{' after else.")
             return True
         elif tok.value == "while":
             self.parse_while_statement()
@@ -169,7 +180,7 @@ class Parser:
             self.parse_assignment()
             return True
         elif tok.value in ["{", "}"]:
-            self.match(tok.value) 
+            self.match(tok.value)
             return True
         elif tok.value == "return":
             self.advance()
@@ -182,34 +193,32 @@ class Parser:
             return True
 
     def parse_main_function(self):
-        self.advance() 
-        self.advance() 
+        self.advance()
+        self.advance()
         if not self.match("("): self.report_error("Syntax Error", "Expected '(' after main.")
         if not self.match(")"): self.report_error("Syntax Error", "Expected ')' after main(.", use_prev=True)
         if not self.match("{"): self.report_error("Syntax Error", "Expected '{' to start main body.")
 
     def parse_declaration(self):
-        self.advance() 
+        self.advance()
         while True:
             tok = self.current()
             if not tok or tok.category != "IDENTIFIER":
                 self.report_error("Invalid Declaration", "Expected identifier after data type.")
-                self.advance() # FORCE ADVANCE to break the loop!
-                self.sync() 
+                self.advance()
+                self.sync()
                 return
-
-            self.advance() 
+            self.advance()
             if self.match("="): self.parse_expression()
-            
             if self.match(","): continue
             else: break
-                
+
         if not self.match(";"):
             self.report_error("Missing Semicolon", "Expected ';' at the end of declaration.", use_prev=True)
             self.sync()
 
     def parse_assignment(self):
-        self.advance() 
+        self.advance()
         if self.match("="):
             self.parse_expression()
             if not self.match(";"):
@@ -224,65 +233,60 @@ class Parser:
             self.sync()
 
     def parse_if_statement(self):
-        self.advance() 
+        self.advance()
         if not self.match("("): self.report_error("Syntax Error", "Expected '(' after 'if'.")
         self.parse_expression()
         if not self.match(")"): self.report_error("Mismatched Parenthesis", "Expected ')' to close if condition.", use_prev=True)
         if not self.match("{"): self.report_error("Syntax Error", "Expected '{' to start if body.")
 
     def parse_while_statement(self):
-        self.advance() 
+        self.advance()
         if not self.match("("): self.report_error("Syntax Error", "Expected '(' after 'while'.")
         self.parse_expression()
         if not self.match(")"): self.report_error("Mismatched Parenthesis", "Expected ')' to close while condition.", use_prev=True)
         if not self.match("{"): self.report_error("Syntax Error", "Expected '{' to start while body.")
 
     def parse_for_statement(self):
-        self.advance() 
+        self.advance()
         if not self.match("("): self.report_error("Syntax Error", "Expected '(' after 'for'.")
-        
-        # Init
+
         if self.current() and self.current().value in self.data_types:
             self.advance(); self.advance()
             if self.match("="): self.parse_expression()
         else:
             self.advance()
             if self.match("="): self.parse_expression()
-            
+
         if not self.match(";"): self.report_error("Missing Semicolon", "Expected ';' after for initialization.", use_prev=True)
-        
-        # Cond
         self.parse_expression()
         if not self.match(";"): self.report_error("Missing Semicolon", "Expected ';' after for condition.", use_prev=True)
-        
-        # Update
         self.parse_expression()
         if not self.match(")"): self.report_error("Mismatched Parenthesis", "Expected ')' to close for loop.", use_prev=True)
         if not self.match("{"): self.report_error("Syntax Error", "Expected '{' to start for body.")
 
     def parse_io_statement(self):
-        self.advance() 
+        self.advance()
         self.parse_expression()
         if not self.match(";"): self.report_error("Missing Semicolon", "Expected ';' after IO statement.", use_prev=True)
 
     def parse_expression(self):
         paren_count = 0
         first_token = True
-        last_was_operand = False 
+        last_was_operand = False
         last_was_operator = False
-        
+
         while self.current():
             c_tok = self.current()
-            
+
             if first_token and c_tok.category == "OPERATOR" and c_tok.value not in ["!", "++", "--"]:
                 self.report_error("Invalid Expression", f"Expression cannot start with binary operator '{c_tok.value}'.")
                 self.advance()
                 first_token = False
                 last_was_operator = True
                 continue
-                
+
             first_token = False
-            
+
             if c_tok.value == "(":
                 paren_count += 1
                 self.advance()
@@ -296,12 +300,11 @@ class Parser:
                     last_was_operator = False
                 else: break
             elif c_tok.category in ["IDENTIFIER", "LITERAL"] or c_tok.value in ["true", "false"]:
-                if last_was_operand: break 
+                if last_was_operand: break
                 last_was_operand = True
                 last_was_operator = False
                 self.advance()
             elif c_tok.category == "OPERATOR":
-                # Catch the back-to-back operators like '+ *' here!
                 if last_was_operator and c_tok.value not in ["!", "++", "--"]:
                     self.report_error("Invalid Expression", f"Unexpected consecutive operator '{c_tok.value}'.")
                 last_was_operator = True
@@ -309,15 +312,35 @@ class Parser:
                 self.advance()
             else:
                 break
-                
-        if paren_count > 0: self.report_error("Mismatched Parenthesis", "Unclosed '(' in expression.", use_prev=True)
+
+        if paren_count > 0:
+            self.report_error("Mismatched Parenthesis", "Unclosed '(' in expression.", use_prev=True)
+
 
 def run_syntax_analyzer(content):
+    # FIX: Also return the full source lines so the frontend can render
+    # the whole file with error lines highlighted in context
+    source_lines = content.splitlines()
+
     tokens = generate_token_stream(content)
     parser = Parser(tokens)
     parser.parse()
-    
+
+    # Build a set of error line numbers for quick lookup
+    error_line_numbers = set(e["line"] for e in parser.errors)
+
+    # Build the annotated source: list of {line_num, code, has_error}
+    annotated_source = [
+        {
+            "line_num": i + 1,
+            "code": line,
+            "has_error": (i + 1) in error_line_numbers
+        }
+        for i, line in enumerate(source_lines)
+    ]
+
     return {
         "success": len(parser.errors) == 0,
-        "errors": parser.errors
+        "errors": parser.errors,
+        "annotated_source": annotated_source   # NEW: full file with error flags
     }
